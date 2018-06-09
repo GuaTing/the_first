@@ -6,10 +6,10 @@ author:Guo
 target:获得时光网中电影的公司
 finished on:2017/6/9
 """
-# from pymongo import MongoClient
-# conn = MongoClient('192.168.0.113', 27017)
-# db = conn.mydb
-# my_set = db.test_set
+from pymongo import MongoClient
+conn = MongoClient('192.168.0.113', 27017)
+db = conn.mydb
+my_set = db.test_set
 import sys
 import urllib.parse
 # reload(sys)
@@ -61,16 +61,13 @@ def distribution_company(url):
     print(l_conpany)
     return l_conpany
 
-r = open("../2013.txt")
+r = open("../2012.txt")
 line = r.readlines()
-final = {}
 a = []
 z = 0
 names_list = []
 movie_names = []
 movie_ids = []
-year = {}
-year["year"] = "2013"
 for names_line in line:
     names_line = names_line.replace('\n','\x01')
     movie_names.append(names_line.split('\x01')[0])
@@ -82,34 +79,31 @@ for names_line in line:
     fans_info_data = driver.page_source
     html = etree.HTML(fans_info_data)
     names = names_line.split('\x01')[0]
+    ids = names_line.split('\x01')[1]
     print(names+"\t2222")
     for i in html.xpath("//div[@class='main']/ul[@id='moreRegion']/li[@class='clickobj']/h3/a"):
         get_title = i.xpath("text()")
 
         for title in get_title:
-            if "2013" in title:
+            if "2012" in title:
                 print(title+"\t3333")
                 z += 1
                 get_url = i.xpath("@href")
                 print("get_url")
                 print (get_url)
-        #         a.append(e5)
                 for url1 in get_url:
                     print(url1)
                     url = url1+'details.html'
-                    # a = [names]
-                    # print(a)
-                    # z += 1
                     if names in names_list:
                         continue
                     else:
                         names_list.append(names)
-                        with open('../film2013/'+names+'.txt',"a+") as f:
-                            f.write("{"+'"_id"'+"="+str(movie_ids)+'\n'
-                                +'"year"'+":"+"2013"+'\n'
-                                +'"movie_name"'+"="+str(names)+'\n'
-                                +'"p_company":'+str(production_company(url))+'\n'
-                                +'"l_company":'+str(distribution_company(url))+'}'
+                        with open('../film2012/'+names+'.txt',"a+") as f:
+                            f.write('_id'+"`"+str(ids)+'\n'
+                                +'year`'+"2012"+'\n'
+                                +'movie_name'+"`"+str(names)+'\n'
+                                +'p_company`'+str(production_company(url))+'\n'
+                                +'l_company`'+str(distribution_company(url))
                             )
 
 # for movie_name in movie_names:
